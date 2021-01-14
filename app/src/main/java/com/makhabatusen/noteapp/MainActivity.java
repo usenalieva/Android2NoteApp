@@ -14,6 +14,10 @@ public class MainActivity extends AppCompatActivity {
     AppBarConfiguration appBarConfiguration;
     NavController navController;
 
+    /* 1. Добавить 10 записей
+2. Удалить запись через AlertDialog на долгое нажатие
+3. Добавить поле createdAt и показать в листе */
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

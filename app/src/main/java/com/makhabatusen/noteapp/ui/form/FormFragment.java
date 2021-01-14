@@ -14,6 +14,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.makhabatusen.noteapp.R;
+import com.makhabatusen.noteapp.models.Note;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class FormFragment extends Fragment {
     private EditText editText;
@@ -35,8 +39,13 @@ public class FormFragment extends Fragment {
 
     private void save() {
         String text = editText.getText().toString().trim();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.ROOT);
+        String date = dateFormat.format(System.currentTimeMillis());
+
+        Note note = new Note(text,date);
         Bundle bundle = new Bundle();
-        bundle.putString("text", text);
+        bundle.putSerializable("note", note);
         getParentFragmentManager().setFragmentResult("rk_form", bundle);
         close();
     }
