@@ -3,24 +3,24 @@ package com.makhabatusen.noteapp.ui.home;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makhabatusen.noteapp.OnItemClickListener;
+import com.makhabatusen.noteapp.Prefs;
 import com.makhabatusen.noteapp.R;
 import com.makhabatusen.noteapp.models.Note;
 
@@ -42,13 +42,28 @@ public class HomeFragment extends Fragment {
 
         ArrayList<Note> list = new ArrayList<>();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.ROOT);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm yyyy/MM/dd", Locale.ROOT);
         String date = dateFormat.format(System.currentTimeMillis());
 
         for (int i = 1; i < 11  ; i++) {
             list.add(new Note("Task # " + i, date));
         }
         adapter.addList(list);
+       setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.prefs_clear_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.item_menu_clear_prefs)
+            new Prefs(requireContext()).clearPrefs();
+        openBoard();
+        return super.onOptionsItemSelected(item);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -91,14 +106,12 @@ public class HomeFragment extends Fragment {
                         adapter.deleteItem(pos);
                     }
                 });
-                alert.setNegativeButton("NO", (dialogInterface, i) -> {
-                });
+                alert.setNegativeButton("NO", null);
                 alert.create().show();
             }
         });
 
     }
-
 
 
     private void setFragmentListener() {
@@ -115,6 +128,10 @@ public class HomeFragment extends Fragment {
         NavController navController = Navigation.findNavController(requireActivity(),
                 R.id.nav_host_fragment);
         navController.navigate(R.id.formFragment);
-
+    }
+    private void openBoard() {
+        NavController navController = Navigation.findNavController(requireActivity(),
+                R.id.nav_host_fragment);
+        navController.navigate(R.id.boardFragment);
     }
 }

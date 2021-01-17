@@ -50,7 +50,7 @@ ImageView profilePic;
                         .load(result)
                         .centerCrop()
                         .circleCrop()
-                        // TODO
+                        // TODO stroke
                      //   .apply(RequestOptions.bitmapTransform(new RoundedCorners(20)))
                         .into(profilePic);
             }

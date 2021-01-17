@@ -40,7 +40,7 @@ public class FormFragment extends Fragment {
     private void save() {
         String text = editText.getText().toString().trim();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.ROOT);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm yyyy/MM/dd", Locale.ROOT);
         String date = dateFormat.format(System.currentTimeMillis());
 
         Note note = new Note(text,date);
