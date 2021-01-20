@@ -33,7 +33,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
             R.drawable.powerful,
             R.drawable.secure,
             R.drawable.cloud};
-    private OnItemClickListener onItemClickListener;
+    private BoardFragmentListener boardFragmentListener;
 
 
     public BoardAdapter() {
@@ -58,8 +58,8 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         return titles.length;
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+    public void setBoardFragmentListener(BoardFragmentListener boardFragmentListener) {
+        this.boardFragmentListener = boardFragmentListener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -76,7 +76,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
             btnStart = itemView.findViewById(R.id.btn_start);
 
             btnStart.setOnClickListener(v -> {
-                onItemClickListener.onCLick(getAdapterPosition());
+                boardFragmentListener.skip();
             });
 
         }
@@ -94,5 +94,8 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
                 btnStart.setVisibility(View.VISIBLE);
             else btnStart.setVisibility(View.GONE);
         }
+    }
+    public  interface BoardFragmentListener {
+        void skip();
     }
 }

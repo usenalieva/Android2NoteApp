@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import com.makhabatusen.noteapp.OnItemClickListener;
 import com.makhabatusen.noteapp.Prefs;
 import com.makhabatusen.noteapp.R;
+import com.makhabatusen.noteapp.models.Note;
 
 import java.util.function.LongBinaryOperator;
 
@@ -42,15 +43,9 @@ public class BoardFragment extends Fragment {
         BoardAdapter adapter = new BoardAdapter();
         viewPager.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onCLick(int pos) {
-                close();
-            }
-
-            @Override
-            public void onLongClick(int pos) {
-            }
+        adapter.setBoardFragmentListener(() -> {
+            new Prefs(requireContext()).saveBoardStatus();
+            close();
         });
 
         view.findViewById(R.id.btn_skip).setOnClickListener(v -> {

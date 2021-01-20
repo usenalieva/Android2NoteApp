@@ -75,7 +75,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         return list.get(position);
     }
 
-
+    public void editItem(int position, Note note) {
+        list.set(position, note);
+        notifyItemChanged(position);
+    }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -88,12 +91,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             tvDate = itemView.findViewById(R.id.tv_date);
 
             itemView.setOnClickListener(v -> {
-                listener.onCLick(getAdapterPosition());
+                listener.onCLick(getAdapterPosition(), getItem(getAdapterPosition()));
 
             });
 
             itemView.setOnLongClickListener(v -> {
-                listener.onLongClick(getAdapterPosition());
+                listener.onLongClick(getAdapterPosition(), getItem(getAdapterPosition()));
                 return true;
             });
         }

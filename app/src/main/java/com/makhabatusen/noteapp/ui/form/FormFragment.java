@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -16,12 +17,17 @@ import android.widget.EditText;
 import com.makhabatusen.noteapp.App;
 import com.makhabatusen.noteapp.R;
 import com.makhabatusen.noteapp.models.Note;
+import com.makhabatusen.noteapp.ui.home.HomeFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class FormFragment extends Fragment {
     private EditText editText;
+    public static final String REQUEST_KEY_FF = "rk_form";
+    public static final String KEY_NOTE_FF = "note";
+    Note note;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,7 +42,16 @@ public class FormFragment extends Fragment {
         view.findViewById(R.id.btn_save).setOnClickListener(v -> {
             save();
         });
+
+        getParentFragmentManager().setFragmentResultListener(HomeFragment.REQUEST_KEY_HF,
+                getViewLifecycleOwner(), (requestKey, result) -> {
+                note = (Note) result.getSerializable(HomeFragment.KEY_NOTE_HF);
+                editText.setText(note.getTitle());
+                });
     }
+
+
+
 
     private void save() {
         String text = editText.getText().toString().trim();
@@ -44,14 +59,20 @@ public class FormFragment extends Fragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm yyyy/MM/dd", Locale.ROOT);
         String date = dateFormat.format(System.currentTimeMillis());
 
-        Note note = new Note(text,date);
 
-        // Adding to DataBase
-        App.getAppDataBase().noteDao().insert(note);
+
+        if (note == null) {
+             note = new Note(text, date);
+            // Adding to DataBase
+            App.getAppDataBase().noteDao().insert(note);
+        } else{
+            note.setTitle(text);
+            App.getAppDataBase().noteDao().upDateItem(note);
+        }
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable("note", note);
-        getParentFragmentManager().setFragmentResult("rk_form", bundle);
+        bundle.putSerializable(KEY_NOTE_FF, note);
+        getParentFragmentManager().setFragmentResult(REQUEST_KEY_FF, bundle);
         close();
     }
 

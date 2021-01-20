@@ -1,7 +1,10 @@
 package com.makhabatusen.noteapp;
 
- public interface OnItemClickListener {
-    void onCLick(int pos);
-    void onLongClick(int pos);
+
+import com.makhabatusen.noteapp.models.Note;
+
+public interface OnItemClickListener {
+    void onCLick(int pos, Note note);
+    void onLongClick(int pos, Note note);
 
 }

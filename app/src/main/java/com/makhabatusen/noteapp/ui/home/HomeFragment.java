@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makhabatusen.noteapp.App;
@@ -24,15 +25,18 @@ import com.makhabatusen.noteapp.OnItemClickListener;
 import com.makhabatusen.noteapp.Prefs;
 import com.makhabatusen.noteapp.R;
 import com.makhabatusen.noteapp.models.Note;
+import com.makhabatusen.noteapp.ui.form.FormFragment;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private NoteAdapter adapter;
+    private Note note;
+    private boolean toAddNote;
+    int position;
+    public static String REQUEST_KEY_HF = "rk_home";
+    public static String KEY_NOTE_HF = "rk_home";
 
 
     @Override
@@ -42,15 +46,6 @@ public class HomeFragment extends Fragment {
         //placing the adapter in this method so it won't be recreated each time
         adapter = new NoteAdapter();
 
-       // ArrayList<Note> list = new ArrayList<>();
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm yyyy/MM/dd", Locale.ROOT);
-        String date = dateFormat.format(System.currentTimeMillis());
-
-//        for (int i = 1; i < 11  ; i++) {
-//            list.add(new Note("Task # " + i, date));
-//        }
-//        adapter.addList(list);
        setHasOptionsMenu(true);
         loadData();
     }
@@ -79,6 +74,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recycler_view);
         view.findViewById(R.id.fab_add).setOnClickListener(v -> {
+            toAddNote = true;
             openForm();
         });
         setFragmentListener();
@@ -93,19 +89,28 @@ public class HomeFragment extends Fragment {
 
     private void initList() {
         recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         adapter.setListener(new OnItemClickListener() {
             @Override
-            public void onCLick(int pos) {
-                Note note = adapter.getItem(pos);
-                Toast.makeText(requireContext(), note.getTitle(), Toast.LENGTH_SHORT).show();
+            public void onCLick(int pos, Note note) {
+                position = pos;
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(KEY_NOTE_HF,note);
+                getParentFragmentManager().setFragmentResult(REQUEST_KEY_HF,bundle);
+                openForm();
+                toAddNote = false;
+
+
+                //   Toast.makeText(requireContext(), note.getTitle(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onLongClick(int pos) {
-                deleteItem(pos);
+            public void onLongClick(int pos, Note note) {
+                deleteItem(pos, note);
             }
 
-            private void deleteItem(int pos) {
+            private void deleteItem(int pos, Note note) {
+
                 AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                 alert.setTitle("Delete Element");
                 alert.setMessage("Are you sure you want to delete the note?");
@@ -113,6 +118,8 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         adapter.deleteItem(pos);
+                        App.getAppDataBase().noteDao().delete(note);
+
                     }
                 });
                 alert.setNegativeButton("NO", null);
@@ -124,12 +131,14 @@ public class HomeFragment extends Fragment {
 
 
     private void setFragmentListener() {
-        getParentFragmentManager().setFragmentResultListener("rk_form",
+        getParentFragmentManager().setFragmentResultListener(FormFragment.REQUEST_KEY_FF,
                 getViewLifecycleOwner(),
                 (requestKey, result) -> {
                     // Log.e("Home", "note =  " + result.getSerializable("note"));
-                    Note note = (Note) result.getSerializable("note");
+                    note = (Note) result.getSerializable(FormFragment.KEY_NOTE_FF);
+                    if (toAddNote)
                     adapter.addItem(note);
+                    else adapter.editItem(position,note);
                 });
     }
 
