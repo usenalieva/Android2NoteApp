@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.makhabatusen.noteapp.App;
 import com.makhabatusen.noteapp.R;
 import com.makhabatusen.noteapp.models.Note;
 
@@ -44,6 +45,10 @@ public class FormFragment extends Fragment {
         String date = dateFormat.format(System.currentTimeMillis());
 
         Note note = new Note(text,date);
+
+        // Adding to DataBase
+        App.getAppDataBase().noteDao().insert(note);
+
         Bundle bundle = new Bundle();
         bundle.putSerializable("note", note);
         getParentFragmentManager().setFragmentResult("rk_form", bundle);

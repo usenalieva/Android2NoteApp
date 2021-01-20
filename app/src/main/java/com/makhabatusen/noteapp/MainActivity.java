@@ -21,6 +21,12 @@ public class MainActivity extends AppCompatActivity {
     AppBarConfiguration appBarConfiguration;
     NavController navController;
 
+    /* HW#4
+1. Удаление записи из БД
+2. Редактирование записи
+3. Кнопка в меню для сортировки по алфавиту (одна кнопка)
+Bonus: Сортировка по времени */
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,12 @@ public class MainActivity extends AppCompatActivity {
                 if (list.contains(destination.getId()))
                     navView.setVisibility(View.VISIBLE);
                 else navView.setVisibility(View.GONE);
+
+                // Hiding the tool bar for board fragment
+                if (destination.getId() == R.id.boardFragment)
+                    getSupportActionBar().hide();
+
+                else getSupportActionBar().show();
 
             }
         });

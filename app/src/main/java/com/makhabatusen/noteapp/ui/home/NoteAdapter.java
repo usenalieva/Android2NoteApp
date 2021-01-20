@@ -13,6 +13,7 @@ import com.makhabatusen.noteapp.models.Note;
 import com.makhabatusen.noteapp.OnItemClickListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     private ArrayList<Note> list;
@@ -27,7 +28,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
         this.listener = listener;
     }
 
-    public void addList(ArrayList<Note> list) {
+    public void addList(List<Note> list) {
         this.list.addAll(list);
         notifyDataSetChanged();
     }
@@ -73,6 +74,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     public Note getItem(int position) {
         return list.get(position);
     }
+
+
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {

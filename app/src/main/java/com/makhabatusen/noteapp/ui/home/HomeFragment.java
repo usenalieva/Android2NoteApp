@@ -19,6 +19,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.makhabatusen.noteapp.App;
 import com.makhabatusen.noteapp.OnItemClickListener;
 import com.makhabatusen.noteapp.Prefs;
 import com.makhabatusen.noteapp.R;
@@ -26,6 +27,7 @@ import com.makhabatusen.noteapp.models.Note;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class HomeFragment extends Fragment {
@@ -40,16 +42,17 @@ public class HomeFragment extends Fragment {
         //placing the adapter in this method so it won't be recreated each time
         adapter = new NoteAdapter();
 
-        ArrayList<Note> list = new ArrayList<>();
+       // ArrayList<Note> list = new ArrayList<>();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm yyyy/MM/dd", Locale.ROOT);
         String date = dateFormat.format(System.currentTimeMillis());
 
-        for (int i = 1; i < 11  ; i++) {
-            list.add(new Note("Task # " + i, date));
-        }
-        adapter.addList(list);
+//        for (int i = 1; i < 11  ; i++) {
+//            list.add(new Note("Task # " + i, date));
+//        }
+//        adapter.addList(list);
        setHasOptionsMenu(true);
+        loadData();
     }
 
     @Override
@@ -80,6 +83,12 @@ public class HomeFragment extends Fragment {
         });
         setFragmentListener();
         initList();
+
+    }
+
+    private void loadData() {
+        List<Note> list = App.getAppDataBase().noteDao().getAll();
+        adapter.addList(list);
     }
 
     private void initList() {

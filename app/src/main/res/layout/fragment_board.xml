@@ -5,13 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.board.BoardFragment">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/view_pager"/>
-
     <Button
         android:id="@+id/btn_skip"
+        android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawableEnd="@drawable/ic_skip"
@@ -20,6 +16,13 @@
         android:text="@string/skip"
         android:textSize="15sp"
         android:textStyle="bold" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/view_pager"/>
+
+
 
 
 </RelativeLayout>
