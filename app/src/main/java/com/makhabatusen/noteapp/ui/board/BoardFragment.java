@@ -5,23 +5,17 @@ import android.os.Bundle;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.makhabatusen.noteapp.OnItemClickListener;
 import com.makhabatusen.noteapp.Prefs;
 import com.makhabatusen.noteapp.R;
-import com.makhabatusen.noteapp.models.Note;
-
-import java.util.function.LongBinaryOperator;
 
 public class BoardFragment extends Fragment {
     public BoardFragment() {

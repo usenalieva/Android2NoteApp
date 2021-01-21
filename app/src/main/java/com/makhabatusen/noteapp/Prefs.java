@@ -24,4 +24,27 @@ public class Prefs {
                 .clear()
                 .apply();
     }
+
+    public boolean sortedByTitle() {
+        return preferences.getBoolean("sortedByTitle", false);
+    }
+
+    public void sortByTitle() {
+        preferences.edit().putBoolean("sortedByTitle", true).apply();
+    }
+
+    public void notSortByTitle() {
+        preferences.edit().putBoolean("sortedByTitle", false).apply();
+    }
+
+    public boolean sortedByDate() {
+        return preferences.getBoolean("sortedByTitle", false);
+    }
+
+    public void sortByDate() {
+        preferences.edit().putBoolean("sortedByTitle", true).apply();
+    }
+    public void notSortByDate() {
+        preferences.edit().putBoolean("sortedByTitle", false).apply();
+    }
 }

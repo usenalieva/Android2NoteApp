@@ -15,5 +15,7 @@
     <string name="start">START</string>
     <string name="clear_prefs">Clear Prefs</string>
     <string name="skip">SKIP</string>
-    <string name="exit">EXIT</string>
+    <string name="exit">Exit</string>
+    <string name="sort_by_title">Sort by title</string>
+    <string name="sort_by_date">Sort by date</string>
 </resources>

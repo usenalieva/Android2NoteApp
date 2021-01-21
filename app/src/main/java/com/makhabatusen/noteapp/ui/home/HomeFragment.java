@@ -9,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.makhabatusen.noteapp.App;
 import com.makhabatusen.noteapp.OnItemClickListener;
-import com.makhabatusen.noteapp.Prefs;
 import com.makhabatusen.noteapp.R;
 import com.makhabatusen.noteapp.models.Note;
 import com.makhabatusen.noteapp.ui.form.FormFragment;
@@ -34,6 +32,7 @@ public class HomeFragment extends Fragment {
     private NoteAdapter adapter;
     private Note note;
     private boolean toAddNote;
+    List<Note> list;
     int position;
     public static String REQUEST_KEY_HF = "rk_home";
     public static String KEY_NOTE_HF = "rk_home";
@@ -46,21 +45,44 @@ public class HomeFragment extends Fragment {
         //placing the adapter in this method so it won't be recreated each time
         adapter = new NoteAdapter();
 
-       setHasOptionsMenu(true);
-        loadData();
+        setHasOptionsMenu(true);
+
+        adapter.addList(loadData());
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.prefs_clear_menu, menu);
+        inflater.inflate(R.menu.prefs_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.item_menu_clear_prefs)
-            new Prefs(requireContext()).clearPrefs();
-        openBoard();
+        if (item.getItemId() == R.id.item_menu_clear_prefs) {
+            App.getPrefs().clearPrefs();
+            openBoard();
+        }
+
+        // Sorting by Title
+        if (item.getItemId() == R.id.item_sort_by_title) {
+            if (App.getPrefs().sortedByTitle())
+                App.getPrefs().notSortByTitle();
+            else
+                App.getPrefs().sortByTitle();
+
+            adapter.addNewList(loadData());
+
+        }
+
+        //  Sorting by Date
+        if (item.getItemId() == R.id.item_menu_sort_by_date) {
+            if (App.getPrefs().sortedByDate())
+                App.getPrefs().notSortByDate();
+            else
+                App.getPrefs().sortByDate();
+
+            adapter.addNewList(loadData());
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -82,9 +104,15 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void loadData() {
-        List<Note> list = App.getAppDataBase().noteDao().getAll();
-        adapter.addList(list);
+
+    private List<Note> loadData() {
+        if (App.getPrefs().sortedByTitle())
+            list = App.getAppDataBase().noteDao().sortByTitle();
+        if (App.getPrefs().sortedByDate())
+            list = App.getAppDataBase().noteDao().sortByDate();
+        else list = App.getAppDataBase().noteDao().getAll();
+        return list;
+
     }
 
     private void initList() {
@@ -95,8 +123,8 @@ public class HomeFragment extends Fragment {
             public void onCLick(int pos, Note note) {
                 position = pos;
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(KEY_NOTE_HF,note);
-                getParentFragmentManager().setFragmentResult(REQUEST_KEY_HF,bundle);
+                bundle.putSerializable(KEY_NOTE_HF, note);
+                getParentFragmentManager().setFragmentResult(REQUEST_KEY_HF, bundle);
                 openForm();
                 toAddNote = false;
 
@@ -137,8 +165,8 @@ public class HomeFragment extends Fragment {
                     // Log.e("Home", "note =  " + result.getSerializable("note"));
                     note = (Note) result.getSerializable(FormFragment.KEY_NOTE_FF);
                     if (toAddNote)
-                    adapter.addItem(note);
-                    else adapter.editItem(position,note);
+                        adapter.addItem(note);
+                    else adapter.editItem(position, note);
                 });
     }
 
@@ -147,6 +175,7 @@ public class HomeFragment extends Fragment {
                 R.id.nav_host_fragment);
         navController.navigate(R.id.formFragment);
     }
+
     private void openBoard() {
         NavController navController = Navigation.findNavController(requireActivity(),
                 R.id.nav_host_fragment);

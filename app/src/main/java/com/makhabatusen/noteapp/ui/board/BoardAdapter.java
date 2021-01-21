@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.makhabatusen.noteapp.OnItemClickListener;
 import com.makhabatusen.noteapp.R;
 
 import pl.droidsonroids.gif.GifImageView;

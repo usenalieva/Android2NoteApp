@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface NoteDao {
 
-    @Query("SELECT * FROM note ORDER BY createdAt DESC ")
+    @Query("SELECT * FROM note ORDER BY createdAt DESC")
     List<Note> getAll();
 
     @Insert
@@ -25,6 +25,12 @@ public interface NoteDao {
 
     @Update (onConflict = OnConflictStrategy.REPLACE)
     void upDateItem(Note note);
+
+    @Query("SELECT * FROM note ORDER BY title ASC")
+    List<Note> sortByTitle();
+
+    @Query("SELECT * FROM note ORDER BY createdAt ASC")
+    List<Note> sortByDate();
 
 
 }

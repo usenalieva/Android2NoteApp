@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
-    private ArrayList<Note> list;
+    private List<Note> list;
   private OnItemClickListener listener;
 
 
@@ -29,6 +29,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     }
 
     public void addList(List<Note> list) {
+        this.list.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void addNewList(List<Note> list) {
+        this.list.clear();
         this.list.addAll(list);
         notifyDataSetChanged();
     }
@@ -78,6 +84,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     public void editItem(int position, Note note) {
         list.set(position, note);
         notifyItemChanged(position);
+    }
+
+    public void sortByTitle(List<Note> list) {
+
+        notifyDataSetChanged();
     }
 
 
