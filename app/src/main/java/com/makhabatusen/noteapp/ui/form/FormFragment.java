@@ -25,7 +25,7 @@ public class FormFragment extends Fragment {
     private EditText editText;
     public static final String REQUEST_KEY_FF = "rk_form";
     public static final String KEY_NOTE_FF = "note";
-    Note note;
+    private Note note;
 
 
     @Override
@@ -57,8 +57,6 @@ public class FormFragment extends Fragment {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm yyyy/MM/dd", Locale.ROOT);
         String date = dateFormat.format(System.currentTimeMillis());
-
-
 
         if (note == null) {
              note = new Note(text, date);

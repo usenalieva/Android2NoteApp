@@ -71,7 +71,6 @@ public class HomeFragment extends Fragment {
                 App.getPrefs().sortByTitle();
 
             adapter.addNewList(loadData());
-
         }
 
         //  Sorting by Date
@@ -124,6 +123,7 @@ public class HomeFragment extends Fragment {
                 position = pos;
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(KEY_NOTE_HF, note);
+                // TODO change to normal bundle
                 getParentFragmentManager().setFragmentResult(REQUEST_KEY_HF, bundle);
                 openForm();
                 toAddNote = false;
@@ -157,7 +157,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-
+    // TODO change bundle
     private void setFragmentListener() {
         getParentFragmentManager().setFragmentResultListener(FormFragment.REQUEST_KEY_FF,
                 getViewLifecycleOwner(),

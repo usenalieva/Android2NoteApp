@@ -12,5 +12,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="editTextStyle">@style/EditTextStyle</item>
+        <item name="buttonStyle">@drawable/bg_edit</item>
+    </style>
+    <style name="EditTextStyle">
+
+        <item name="android:background">@drawable/bg_edit</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:textSize">18sp</item>
     </style>
 </resources>

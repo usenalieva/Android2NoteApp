@@ -18,4 +18,17 @@
     <string name="exit">Exit</string>
     <string name="sort_by_title">Sort by title</string>
     <string name="sort_by_date">Sort by date</string>
+    <string name="type_a_note">Type a Note</string>
+    <string name="makhabat_usen">Makhabat Usen</string>
+    <string name="android_developer">Android Developer</string>
+    <string name="followers">Followers</string>
+    <string name="_150k">150K</string>
+    <string name="my_works">My Works</string>
+    <string name="project_1">PROJECT#1</string>
+    <string name="project_2">PROJECT#2</string>
+    <string name="desc_1">Desc#1</string>
+    <string name="desc_2">Desc#2</string>
+    <string name="_5_0">5.0</string>
+    <string name="rating">Rating</string>
+
 </resources>

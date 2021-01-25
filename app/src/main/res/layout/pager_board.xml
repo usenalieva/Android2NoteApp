@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="32dp">
 
-    <pl.droidsonroids.gif.GifImageView
-        android:layout_marginTop="60dp"
-        android:id="@+id/gif_board_pic"
+    <!--    <pl.droidsonroids.gif.GifImageView-->
+    <!--        android:layout_marginTop="60dp"-->
+    <!--        android:id="@+id/gif_board_pic"-->
+    <!--        android:layout_width="200dp"-->
+    <!--        android:layout_height="200dp"-->
+    <!--        android:src="@drawable/cloud" />-->
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/av_lottie"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:src="@drawable/cloud" />
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -30,15 +38,15 @@
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="@string/description"
-        android:textSize="16sp"/>
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/btn_start"
-        android:textStyle="bold"
-        android:textSize="15sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="@string/start" />
+        android:text="@string/start"
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
 </LinearLayout>

@@ -9,29 +9,28 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.makhabatusen.noteapp.R;
 
 import pl.droidsonroids.gif.GifImageView;
 
 public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> {
 
-    private String[] titles = {"Telegram", "Fast", "Free", "Powerful", "Secure", "Cloud-Based"};
+    private String[] titles = {"Note 27", "Simple",  "Powerful", "Secure", "Cloud-Based"};
     private String[] descriptions = {
-            "The world's fastest messaging app. It is free and secure.",
-            "Telegram delivers messages faster than any other application.",
-            "Telegram is free forever. No ads. No subscription fees.",
-            "Telegram has no limits on the size of your media and chats.",
-            "Telegram keeps your messages safe from hacker attacks.",
-            "Telegram lets you access your messages from multiple devices."
+            "The world's best notepad app. It is free and secure.",
+            "Note 27  is a simple and awesome notepad app.",
+            "Note 27 has no limits on the size of your notes.",
+            "Note 27 keeps your notes safe from hacker attacks.",
+            "Note 27 lets you access your notes from multiple devices."
     };
 
     private int[] icons = {
-            R.drawable.telegram,
-            R.drawable.fast,
-            R.drawable.free,
-            R.drawable.powerful,
-            R.drawable.secure,
-            R.drawable.cloud};
+            R.raw.a_notepad,
+            R.raw.a_simple,
+            R.raw.a_infinity,
+            R.raw.a_security_scan,
+            R.raw.a_cloud};
     private BoardFragmentListener boardFragmentListener;
 
 
@@ -64,14 +63,18 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView textTitle;
         private TextView textDesc;
-        private GifImageView gifImages;
+
+      //  private GifImageView gifImages;
+        private LottieAnimationView lottieAnimationView;
+
         private Button btnStart;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textTitle = itemView.findViewById(R.id.tv_title);
             textDesc = itemView.findViewById(R.id.tv_desc);
-            gifImages = itemView.findViewById(R.id.gif_board_pic);
+           // gifImages = itemView.findViewById(R.id.gif_board_pic);
+            lottieAnimationView = itemView.findViewById(R.id.av_lottie);
             btnStart = itemView.findViewById(R.id.btn_start);
 
             btnStart.setOnClickListener(v -> {
@@ -83,7 +86,8 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         public void bind(int position) {
             textTitle.setText(titles[position]);
             textDesc.setText(descriptions[position]);
-            gifImages.setImageResource(icons[position]);
+           // gifImages.setImageResource(icons[position]);
+            lottieAnimationView.setAnimation(icons[position]);
             startBtn(position);
 
         }
@@ -94,7 +98,8 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
             else btnStart.setVisibility(View.GONE);
         }
     }
-    public  interface BoardFragmentListener {
+
+    public interface BoardFragmentListener {
         void skip();
     }
 }

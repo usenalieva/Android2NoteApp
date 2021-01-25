@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.makhabatusen.noteapp.Prefs;
 import com.makhabatusen.noteapp.R;
 
@@ -37,6 +39,10 @@ public class BoardFragment extends Fragment {
         BoardAdapter adapter = new BoardAdapter();
         viewPager.setAdapter(adapter);
 
+        // setting  TabLayout indicators
+        TabLayout tabLayout = view.findViewById(R.id.tl_indicators);
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+        }).attach();
         adapter.setBoardFragmentListener(() -> {
             new Prefs(requireContext()).saveBoardStatus();
             close();
