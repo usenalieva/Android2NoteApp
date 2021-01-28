@@ -25,7 +25,7 @@ public class Prefs {
                 .apply();
     }
 
-    public boolean sortedByTitle() {
+    public boolean isSortedByTitle() {
         return preferences.getBoolean("sortedByTitle", false);
     }
 
@@ -37,13 +37,13 @@ public class Prefs {
         preferences.edit().putBoolean("sortedByTitle", false).apply();
     }
 
-    public boolean sortedByDate() {
+    public boolean isSortedByDate() {
         return preferences.getBoolean("sortedByTitle", false);
     }
 
+
     public void sortByDate() {
-        preferences.edit().putBoolean("sortedByTitle", true).apply();
-    }
+        preferences.edit().putBoolean("sortedByTitle", true).apply(); }
     public void notSortByDate() {
         preferences.edit().putBoolean("sortedByTitle", false).apply();
     }

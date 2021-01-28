@@ -30,5 +30,11 @@
     <string name="desc_2">Desc#2</string>
     <string name="_5_0">5.0</string>
     <string name="rating">Rating</string>
+    <string name="next">NEXT</string>
+    <string name="phone_number">Phone number</string>
+    <string name="sms_pin">sms PIN</string>
+    <string name="confirm">Confirm</string>
+    <string name="_00_59">00:59</string>
+    <string name="please_check_if_number_is_correct">Please, check if number is correct</string>
 
 </resources>

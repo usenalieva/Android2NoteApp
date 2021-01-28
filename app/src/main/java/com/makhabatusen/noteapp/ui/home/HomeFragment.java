@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -64,23 +63,40 @@ public class HomeFragment extends Fragment {
         }
 
         // Sorting by Title
-        if (item.getItemId() == R.id.item_sort_by_title) {
-            if (App.getPrefs().sortedByTitle())
-                App.getPrefs().notSortByTitle();
-            else
-                App.getPrefs().sortByTitle();
+//        if (item.getItemId() == R.id.item_sort_by_title) {
+//            if (App.getPrefs().isSortedByTitle())
+//                App.getPrefs().clearPrefs();
+//            else
+//                App.getPrefs().sortByTitle();
+//
+//            adapter.addNewList(loadData());
+//        }
 
-            adapter.addNewList(loadData());
+
+        // Sorting by Title
+        else if (item.getItemId() == R.id.item_sort_by_title) {
+            if (App.getPrefs().isSortedByTitle()) {
+                App.getPrefs().notSortByTitle();
+                adapter.addNewList(loadData());
+            } else {
+                App.getPrefs().sortByTitle();
+                List<Note> list = App.getAppDataBase().noteDao().sortByTitle();
+                adapter.addNewList(list);
+            }
+
+
         }
 
         //  Sorting by Date
-        if (item.getItemId() == R.id.item_menu_sort_by_date) {
-            if (App.getPrefs().sortedByDate())
+        else if (item.getItemId() == R.id.item_menu_sort_by_date) {
+            if (App.getPrefs().isSortedByDate()) {
                 App.getPrefs().notSortByDate();
-            else
+                adapter.addNewList(loadData());
+            } else {
                 App.getPrefs().sortByDate();
-
-            adapter.addNewList(loadData());
+                List<Note> list = App.getAppDataBase().noteDao().sortByDate();
+                adapter.addNewList(list);
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -104,13 +120,18 @@ public class HomeFragment extends Fragment {
     }
 
 
+//    private List<Note> loadData() {
+//        if (App.getPrefs().isSortedByTitle())
+//            list = App.getAppDataBase().noteDao().sortByTitle();
+//        if (App.getPrefs().isSortedByDate())
+//            list = App.getAppDataBase().noteDao().sortByDate();
+//        else list = App.getAppDataBase().noteDao().getAll();
+//        return list;
+//
+//    }
+
     private List<Note> loadData() {
-        if (App.getPrefs().sortedByTitle())
-            list = App.getAppDataBase().noteDao().sortByTitle();
-        if (App.getPrefs().sortedByDate())
-            list = App.getAppDataBase().noteDao().sortByDate();
-        else list = App.getAppDataBase().noteDao().getAll();
-        return list;
+        return list = App.getAppDataBase().noteDao().getAll();
 
     }
 
@@ -127,7 +148,6 @@ public class HomeFragment extends Fragment {
                 getParentFragmentManager().setFragmentResult(REQUEST_KEY_HF, bundle);
                 openForm();
                 toAddNote = false;
-
 
                 //   Toast.makeText(requireContext(), note.getTitle(), Toast.LENGTH_SHORT).show();
             }

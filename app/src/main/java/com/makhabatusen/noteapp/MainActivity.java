@@ -1,10 +1,7 @@
 package com.makhabatusen.noteapp;
 
 import android.os.Bundle;
-
 import android.view.View;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,17 +12,19 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     AppBarConfiguration appBarConfiguration;
     NavController navController;
 
-    /* HW#4
-1. Удаление записи из БД
-2. Редактирование записи
-3. Кнопка в меню для сортировки по алфавиту (одна кнопка)
-Bonus: Сортировка по времени */
+    /* HW#6
+1. Окно для ввода кода из СМС
+2. Обратный отсчет, при завершении показать первое окно с красным текстом "Проверить номер"
+3. После Board показывать PhoneFragment */
 
 
     @Override
@@ -36,8 +35,13 @@ Bonus: Сортировка по времени */
 
         initNavController(navView);
         Prefs prefs = new Prefs(this);
+
         if (!prefs.isShown())
             navController.navigate(R.id.boardFragment);
+            // checking user verification
+//        else if (FirebaseAuth.getInstance().getCurrentUser() == null)
+//            navController.navigate(R.id.phoneFragment);
+
 
     }
 
