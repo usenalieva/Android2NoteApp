@@ -67,11 +67,9 @@ public class BoardFragment extends Fragment {
     private void close() {
         Prefs prefs = new Prefs(requireContext());
         prefs.saveBoardStatus();
-//        NavController navController = Navigation.findNavController(requireActivity(),
-//                R.id.nav_host_fragment);
-//        navController.navigateUp();
         NavController navController = Navigation.findNavController(requireActivity(),
                 R.id.nav_host_fragment);
+        navController.navigateUp();
         navController.navigate(R.id.phoneFragment);
 
     }

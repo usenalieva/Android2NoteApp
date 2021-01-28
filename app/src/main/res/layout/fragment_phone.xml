@@ -10,23 +10,23 @@
 
 
     <LinearLayout
+        android:id="@+id/view_sms_request"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:orientation="vertical">
 
-
         <LinearLayout
-            android:id="@+id/view_sms_request"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="5">
 
             <com.hbb20.CountryCodePicker
                 android:id="@+id/ccp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center"
                 app:ccp_autoDetectCountry="true"
                 app:ccp_showNameCode="true"
@@ -36,7 +36,7 @@
                 android:id="@+id/et_phone"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:hint="@string/phone_number"
                 android:inputType="phone"
                 android:maxLength="9"
@@ -44,19 +44,19 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_check_num"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/please_check_if_number_is_correct"
-            android:textColor="@color/red" />
-
         <Button
             android:id="@+id/btn_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/next" />
+
+        <TextView
+            android:id="@+id/tv_check_num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/please_check_if_number_is_correct"
+            android:textColor="@color/red" />
 
     </LinearLayout>
 
@@ -66,6 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:padding="8dp"
         android:orientation="vertical">
 
 
@@ -76,7 +77,7 @@
             android:layout_height="wrap_content"
             android:cursorVisible="true"
             android:hint="@string/sms_pin"
-            android:inputType="text"
+            android:inputType="number"
             android:maxLength="6"
             android:padding="10dp"
             android:textColor="@color/blue"
