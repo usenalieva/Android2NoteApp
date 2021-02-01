@@ -14,6 +14,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -21,10 +22,11 @@ public class MainActivity extends AppCompatActivity {
     AppBarConfiguration appBarConfiguration;
     NavController navController;
 
-    /* HW#6
-1. Окно для ввода кода из СМС
-2. Обратный отсчет, при завершении показать первое окно с красным текстом "Проверить номер"
-3. После Board показывать PhoneFragment */
+    /* HW#7
+1. Добавить Firestore
+2. При добавлении записи в Room, также добавлять в Firestore
+3. При удалении удалять с Firestore
+4. Удаление записи через Console */
 
 
     @Override
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
             // checking user verification
 //        else if (FirebaseAuth.getInstance().getCurrentUser() == null)
 //            navController.navigate(R.id.phoneFragment);
+
+
 
 
     }

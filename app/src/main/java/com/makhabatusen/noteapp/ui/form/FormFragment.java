@@ -1,6 +1,11 @@
 package com.makhabatusen.noteapp.ui.form;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,11 +13,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.makhabatusen.noteapp.App;
 import com.makhabatusen.noteapp.R;
 import com.makhabatusen.noteapp.models.Note;
@@ -26,7 +30,7 @@ public class FormFragment extends Fragment {
     public static final String REQUEST_KEY_FF = "rk_form";
     public static final String KEY_NOTE_FF = "note";
     private Note note;
-
+    private final FirebaseFirestore FS_DB = FirebaseFirestore.getInstance();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,12 +63,12 @@ public class FormFragment extends Fragment {
         String date = dateFormat.format(System.currentTimeMillis());
 
         if (note == null) {
-             note = new Note(text, date);
-            // Adding to DataBase
-            App.getAppDataBase().noteDao().insert(note);
+            note = new Note(text, date);
+            addToFireStore();
+
         } else{
             note.setTitle(text);
-            App.getAppDataBase().noteDao().upDateItem(note);
+            editAtFireStore();
         }
 
         Bundle bundle = new Bundle();
@@ -72,6 +76,51 @@ public class FormFragment extends Fragment {
         getParentFragmentManager().setFragmentResult(REQUEST_KEY_FF, bundle);
         close();
     }
+
+    private void addToFireStore() {
+
+        FS_DB.collection("notes")
+                .add(note)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) { // Adding to DataBase
+                        note.setId(documentReference.getId());
+                        App.getAppDataBase().noteDao().insert(note);
+                        Log.e("ololo", "Note added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("ololo", "Error adding note", e);
+                    }
+                });
+    }
+
+    private void editAtFireStore() {
+
+
+        FS_DB.collection("notes").document(note.getId())
+                .set(note)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.e("ololo", "Note updated with ID: " + note.getId());
+                        App.getAppDataBase().noteDao().upDateItem(note);
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("ololo", "Error updating note", e);
+
+                    }
+                });
+
+    }
+
 
     private void close() {
         NavController navController = Navigation.findNavController(requireActivity(),

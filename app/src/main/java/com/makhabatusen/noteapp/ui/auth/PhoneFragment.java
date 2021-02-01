@@ -79,14 +79,18 @@ public class PhoneFragment extends Fragment {
     private void setListeners(@NonNull View view) {
         btnNext = view.findViewById(R.id.btn_next);
         btnNext.setOnClickListener(v -> requestSms());
-        view.findViewById(R.id.btn_confirm).setOnClickListener(v -> confirm());
+
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
                 new OnBackPressedCallback(true) {
                     @Override
                     public void handleOnBackPressed() {
-                        requireActivity().finish();
+                        Log.e("ololo", "handleOnBackPressed" );
+                        close();
                     }
                 });
+
+        view.findViewById(R.id.btn_confirm).setOnClickListener(v -> confirm());
+
     }
 
     private void confirm() {
@@ -148,6 +152,8 @@ public class PhoneFragment extends Fragment {
                 super.onCodeSent(s, forceResendingToken);
                 verificationID = s;
                 showPinCodeView();
+                Log.e("ololo", "onCodeSent" + s);
+
             }
 
             @Override

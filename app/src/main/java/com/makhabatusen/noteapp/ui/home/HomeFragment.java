@@ -3,6 +3,7 @@ package com.makhabatusen.noteapp.ui.home;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +19,9 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.makhabatusen.noteapp.App;
 import com.makhabatusen.noteapp.OnItemClickListener;
 import com.makhabatusen.noteapp.R;
@@ -35,6 +39,7 @@ public class HomeFragment extends Fragment {
     int position;
     public static String REQUEST_KEY_HF = "rk_home";
     public static String KEY_NOTE_HF = "rk_home";
+    private final FirebaseFirestore FS_DB = FirebaseFirestore.getInstance();
 
 
     @Override
@@ -71,8 +76,7 @@ public class HomeFragment extends Fragment {
 //
 //            adapter.addNewList(loadData());
 //        }
-
-
+        
         // Sorting by Title
         else if (item.getItemId() == R.id.item_sort_by_title) {
             if (App.getPrefs().isSortedByTitle()) {
@@ -119,7 +123,6 @@ public class HomeFragment extends Fragment {
 
     }
 
-
 //    private List<Note> loadData() {
 //        if (App.getPrefs().isSortedByTitle())
 //            list = App.getAppDataBase().noteDao().sortByTitle();
@@ -139,6 +142,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         adapter.setListener(new OnItemClickListener() {
+
             @Override
             public void onCLick(int pos, Note note) {
                 position = pos;
@@ -148,7 +152,6 @@ public class HomeFragment extends Fragment {
                 getParentFragmentManager().setFragmentResult(REQUEST_KEY_HF, bundle);
                 openForm();
                 toAddNote = false;
-
                 //   Toast.makeText(requireContext(), note.getTitle(), Toast.LENGTH_SHORT).show();
             }
 
@@ -166,14 +169,38 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         adapter.deleteItem(pos);
+                        deleteFromFireStore(note);
                         App.getAppDataBase().noteDao().delete(note);
-
                     }
                 });
                 alert.setNegativeButton("NO", null);
                 alert.create().show();
             }
         });
+
+    }
+
+    private void deleteFromFireStore(Note note) {
+
+
+        FS_DB.collection("notes").document(note.getId())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.e("ololo", "Note deleted with ID: " + note.getId());
+                        App.getAppDataBase().noteDao().upDateItem(note);
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("ololo", "Error deleting note", e);
+
+                    }
+                });
 
     }
 
