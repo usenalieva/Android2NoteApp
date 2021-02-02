@@ -10,6 +10,17 @@ public class Prefs {
         preferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
     }
 
+    public void avatarUrl(String value) {
+        preferences
+                .edit()
+                .putString("avatarUrl", value)
+                .apply();
+    }
+
+    public String avatarUrl(){
+        return preferences.getString("avatarUrl", "");
+    }
+
     public boolean isShown() {
         return preferences.getBoolean("isShown", false);
     }
@@ -40,7 +51,6 @@ public class Prefs {
     public boolean isSortedByDate() {
         return preferences.getBoolean("sortedByTitle", false);
     }
-
 
     public void sortByDate() {
         preferences.edit().putBoolean("sortedByTitle", true).apply(); }

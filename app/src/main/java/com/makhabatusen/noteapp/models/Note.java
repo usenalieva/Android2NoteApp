@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 
 @Entity
@@ -14,6 +16,9 @@ public class Note implements Serializable {
     private String id;
     private String title;
     private String createdAt;
+
+    // empty constructor for FireStore
+    public Note() { }
 
     public Note(String title, String createdAt) {
         this.title = title;

@@ -1,6 +1,7 @@
 package com.makhabatusen.noteapp;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -58,28 +60,27 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_notifications,
                 R.id.navigation_profile)
                 .build();
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        assert navHostFragment != null;
+        navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-            @Override
-            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                ArrayList<Integer> list = new ArrayList<>();
-                list.add(R.id.navigation_home);
-                list.add(R.id.navigation_dashboard);
-                list.add(R.id.navigation_notifications);
-                list.add(R.id.navigation_profile);
-                if (list.contains(destination.getId()))
-                    navView.setVisibility(View.VISIBLE);
-                else navView.setVisibility(View.GONE);
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            ArrayList<Integer> list = new ArrayList<>();
+            list.add(R.id.navigation_home);
+            list.add(R.id.navigation_dashboard);
+            list.add(R.id.navigation_notifications);
+            list.add(R.id.navigation_profile);
+            if (list.contains(destination.getId()))
+                navView.setVisibility(View.VISIBLE);
+            else navView.setVisibility(View.GONE);
 
-                // Hiding the tool bar for board fragment
-                if (destination.getId() == R.id.boardFragment)
-                    getSupportActionBar().hide();
+            // Hiding the tool bar for board fragment
+            if (destination.getId() == R.id.boardFragment)
+                getSupportActionBar().hide();
 
-                else getSupportActionBar().show();
+            else getSupportActionBar().show();
 
-            }
         });
     }
 
@@ -88,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
 
 }
 

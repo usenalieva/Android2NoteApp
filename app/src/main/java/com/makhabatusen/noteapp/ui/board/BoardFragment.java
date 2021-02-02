@@ -1,5 +1,6 @@
 package com.makhabatusen.noteapp.ui.board;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -67,7 +68,6 @@ public class BoardFragment extends Fragment {
         prefs.saveBoardStatus();
         NavController navController = Navigation.findNavController(requireActivity(),
                 R.id.nav_host_fragment);
-        navController.navigateUp();
         navController.navigate(R.id.phoneFragment);
 
     }

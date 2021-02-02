@@ -31,11 +31,13 @@ import com.makhabatusen.noteapp.ui.form.FormFragment;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
+
     private RecyclerView recyclerView;
     private NoteAdapter adapter;
     private Note note;
     private boolean toAddNote;
     List<Note> list;
+    NavController navController;
     int position;
     public static String REQUEST_KEY_HF = "rk_home";
     public static String KEY_NOTE_HF = "rk_home";
@@ -118,6 +120,8 @@ public class HomeFragment extends Fragment {
             toAddNote = true;
             openForm();
         });
+        navController = Navigation.findNavController(requireActivity(),
+                R.id.nav_host_fragment);
         setFragmentListener();
         initList();
 
@@ -185,22 +189,14 @@ public class HomeFragment extends Fragment {
 
         FS_DB.collection("notes").document(note.getId())
                 .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.e("ololo", "Note deleted with ID: " + note.getId());
-                        App.getAppDataBase().noteDao().upDateItem(note);
+                .addOnSuccessListener(aVoid -> {
+                    Log.e("ololo", "Note deleted with ID: " + note.getId());
+                    App.getAppDataBase().noteDao().upDateItem(note);
 
 
-                    }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("ololo", "Error deleting note", e);
-
-                    }
-                });
+                .addOnFailureListener(e -> Log.
+                        e("ololo", "Error deleting note", e));
 
     }
 
@@ -218,14 +214,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void openForm() {
-        NavController navController = Navigation.findNavController(requireActivity(),
-                R.id.nav_host_fragment);
         navController.navigate(R.id.formFragment);
     }
 
     private void openBoard() {
-        NavController navController = Navigation.findNavController(requireActivity(),
-                R.id.nav_host_fragment);
         navController.navigate(R.id.boardFragment);
     }
 }

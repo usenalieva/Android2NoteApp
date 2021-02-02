@@ -40,7 +40,7 @@
     <fragment
         android:id="@+id/phoneFragment"
         android:name="com.makhabatusen.noteapp.ui.auth.PhoneFragment"
-        android:label="fragment_board"
+        android:label="phone"
         tools:layout="@layout/fragment_phone" />
 
 </navigation>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,8 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.makhabatusen.noteapp.App;
@@ -83,7 +86,8 @@ public class FormFragment extends Fragment {
                 .add(note)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) { // Adding to DataBase
+                    public void onSuccess(DocumentReference documentReference) {
+                        // Adding to DataBased
                         note.setId(documentReference.getId());
                         App.getAppDataBase().noteDao().insert(note);
                         Log.e("ololo", "Note added with ID: " + documentReference.getId());
@@ -97,28 +101,45 @@ public class FormFragment extends Fragment {
                 });
     }
 
+
+//    private void editAtFireStore() {
+//
+//
+//        FS_DB.collection("notes").document(note.getId())
+//                .set(note)
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        Log.e("ololo", "Note updated with ID: " + note.getId());
+//                        App.getAppDataBase().noteDao().upDateItem(note);
+//
+//
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.e("ololo", "Error updating note", e);
+//
+//                    }
+//                });
+//    }
     private void editAtFireStore() {
 
 
         FS_DB.collection("notes").document(note.getId())
                 .set(note)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.e("ololo", "Note updated with ID: " + note.getId());
-                        App.getAppDataBase().noteDao().upDateItem(note);
-
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("ololo", "Error updating note", e);
-
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isComplete()) {
+                            Log.e("ololo", "Note updated with ID: " + note.getId());
+                            App.getAppDataBase().noteDao().upDateItem(note);
+                        } else {
+                            Log.e("ololo", "Error updating note");
+                        }
                     }
                 });
-
     }
 
 

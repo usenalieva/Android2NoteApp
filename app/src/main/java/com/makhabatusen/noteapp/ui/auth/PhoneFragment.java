@@ -16,7 +16,6 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.chaos.view.PinView;
@@ -59,10 +58,22 @@ public class PhoneFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        btnBackClickListener();
         initViews(view);
         showSmsRequestView();
         setListeners(view);
         setCallBacks();
+    }
+
+    private void btnBackClickListener() {
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                Log.e("ololo", "handleOnBackPressed");
+                close();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
     }
 
     private void initViews(@NonNull View view) {
@@ -80,14 +91,14 @@ public class PhoneFragment extends Fragment {
         btnNext = view.findViewById(R.id.btn_next);
         btnNext.setOnClickListener(v -> requestSms());
 
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
-                new OnBackPressedCallback(true) {
-                    @Override
-                    public void handleOnBackPressed() {
-                        Log.e("ololo", "handleOnBackPressed" );
-                        close();
-                    }
-                });
+//        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
+//                new OnBackPressedCallback(true) {
+//                    @Override
+//                    public void handleOnBackPressed() {
+//                        Log.e("ololo", "handleOnBackPressed" );
+//                        close();
+//                    }
+//                });
 
         view.findViewById(R.id.btn_confirm).setOnClickListener(v -> confirm());
 
@@ -98,7 +109,7 @@ public class PhoneFragment extends Fragment {
         if (code.length() == 6 && TextUtils.isDigitsOnly(code)) {
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationID, code);
             signIn(credential);
-
+            Log.e("fkjgskgj", "confirm: ");
         }
     }
 
@@ -168,7 +179,11 @@ public class PhoneFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    close();
+                    Navigation.findNavController(
+                            requireActivity(),
+                            R.id.nav_host_fragment
+                    )
+                            .navigate(R.id.navigation_home);
                 } else {
                     Toast.makeText(requireContext(), "Error: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -178,10 +193,42 @@ public class PhoneFragment extends Fragment {
         });
     }
 
+    /**
+     * TODO: dz
+     *
+     0 ->
+     * oldList
+     *
+     * btnTitleSort {
+     * oldList -> currentList
+     * adapter.setData -> sortByTitleList
+     * }
+     *
+     * btnAbsSort {
+     * oldList -> currentList
+     * adapter.setData -> sortByAbsList
+     * }
+     *
+     * btnBack {
+     * adapter.setData -> oldList
+     * }
+     *
+     1 ->
+     * add to project user registration by phone number
+     *
+     2 ->
+     * save profile data to FireStore
+     *
+     3 ->
+     * use saveArgs for data transferring between fragments
+     *
+     4 ->
+     * make all requests async. use background thread
+     *
+     */
+
     private void close() {
-        NavController navController = Navigation.findNavController(requireActivity(),
-                R.id.nav_host_fragment);
-        navController.navigateUp();
+        requireActivity().finish();
     }
 
     private void requestSms() {
@@ -198,6 +245,4 @@ public class PhoneFragment extends Fragment {
         PhoneAuthProvider.verifyPhoneNumber(options);
         tvCheckNum.setVisibility(View.GONE);
     }
-
-
 }
