@@ -19,8 +19,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.makhabatusen.noteapp.App;
 import com.makhabatusen.noteapp.OnItemClickListener;
@@ -36,12 +34,15 @@ public class HomeFragment extends Fragment {
     private NoteAdapter adapter;
     private Note note;
     private boolean toAddNote;
-    List<Note> list;
     NavController navController;
     int position;
     public static String REQUEST_KEY_HF = "rk_home";
     public static String KEY_NOTE_HF = "rk_home";
     private final FirebaseFirestore FS_DB = FirebaseFirestore.getInstance();
+
+    // lists for sorting
+    List<Note> currentList;
+    List<Note> oldList;
 
 
     @Override
@@ -53,7 +54,13 @@ public class HomeFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        adapter.addList(loadData());
+//        // NEW SORTING
+//        adapter.addList(currentList);
+
+        // old sorting
+       adapter.addList(loadData());
+
+
     }
 
     @Override
@@ -65,9 +72,14 @@ public class HomeFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.item_menu_clear_prefs) {
-            App.getPrefs().clearPrefs();
+            // App.getPrefs().clearPrefs();
             openBoard();
+
+            // new Sorting
+
         }
+
+        // Old Sorting here
 
         // Sorting by Title
 //        if (item.getItemId() == R.id.item_sort_by_title) {
@@ -78,7 +90,7 @@ public class HomeFragment extends Fragment {
 //
 //            adapter.addNewList(loadData());
 //        }
-        
+
         // Sorting by Title
         else if (item.getItemId() == R.id.item_sort_by_title) {
             if (App.getPrefs().isSortedByTitle()) {
@@ -107,6 +119,25 @@ public class HomeFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    //    private List<Note> loadData() {
+//        if (App.getPrefs().isSortedByTitle())
+//            list = App.getAppDataBase().noteDao().sortByTitle();
+//        if (App.getPrefs().isSortedByDate())
+//            list = App.getAppDataBase().noteDao().sortByDate();
+//        else list = App.getAppDataBase().noteDao().getAll();
+//        return list;
+//
+//    }
+
+    private List<Note> loadData() {
+        return currentList = App.getAppDataBase().noteDao().getInitialList();
+
+    }
+
+
+
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -127,20 +158,27 @@ public class HomeFragment extends Fragment {
 
     }
 
-//    private List<Note> loadData() {
-//        if (App.getPrefs().isSortedByTitle())
-//            list = App.getAppDataBase().noteDao().sortByTitle();
-//        if (App.getPrefs().isSortedByDate())
-//            list = App.getAppDataBase().noteDao().sortByDate();
-//        else list = App.getAppDataBase().noteDao().getAll();
-//        return list;
-//
-//    }
 
-    private List<Note> loadData() {
-        return list = App.getAppDataBase().noteDao().getAll();
+    /* 0 ->
+     * oldList
+     *
+     * btnTitleSort {
+     * oldList -> currentList
+     * adapter.setData -> sortByTitleList
+     * }
+     *
+     * btnAbsSort {
+     * oldList -> currentList
+     * adapter.setData -> sortByAbsList
+     * }
+     *
+     * btnBack {
+     * adapter.setData -> oldList
+     * }
+     */
 
-    }
+
+
 
     private void initList() {
         recyclerView.setAdapter(adapter);

@@ -15,7 +15,16 @@ import java.util.List;
 public interface NoteDao {
 
     @Query("SELECT * FROM note ORDER BY createdAt DESC")
-    List<Note> getAll();
+    List<Note> getInitialList();
+
+    // oldList and CurrentList for sorting purposes
+    @Query("SELECT * FROM note")
+    List<Note> getOldList();
+
+
+    @Query("SELECT * FROM note")
+    List<Note> getCurrentList();
+
 
     @Insert
     void insert(Note note);
